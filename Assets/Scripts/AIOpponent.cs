@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class AIOpponent : MonoBehaviour
 {
-    private float MOVEMENT_VELOCITY = 3f;
+    private float MOVEMENT_VELOCITY = 5f;
 
     [SerializeField] private Transform aiOpponent;
     [SerializeField] private Transform ball;
