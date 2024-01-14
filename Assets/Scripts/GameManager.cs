@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using NUnit.Framework.Constraints;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -39,6 +40,7 @@ public class GameManager : MonoBehaviour
     }
 
     private State state;
+    private bool mainPlayerWon;
     private int mainPlayerScore = 0;
     private int opponentScore = 0;
 
@@ -54,6 +56,7 @@ public class GameManager : MonoBehaviour
         ball.BallDeflected += BallOnBallDeflected;
 
         state = State.Playing;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void BallOnBallDeflected(object sender, Player player)
@@ -80,13 +83,41 @@ public class GameManager : MonoBehaviour
 
     private void BallOnGameOverWallTouched(object sender, Wall wall)
     {
-        Debug.Log("Game over!");
+        if (wall == Wall.Left)
+        {
+            mainPlayerWon = false;
+        }
+        else
+        {
+            mainPlayerWon = true;
+        }
         state = State.GameOver;
+        Cursor.lockState = CursorLockMode.None;
         GameStateChanged?.Invoke(this, state);
     }
 
     // Update is called once per frame
     void Update()
     {
+    }
+
+    public Player GetWinningPlayer()
+    {
+        return mainPlayerWon == true ? Player.MainPlayer : Player.Opponent;
+    }
+
+    public int GetMainPlayerScore()
+    {
+        return mainPlayerScore;
+    }
+
+    public void RestartGame()
+    {
+        mainPlayerScore = 0;
+        opponentScore = 0;
+        mainPlayerWon = false;
+        state = State.Playing;
+        Cursor.lockState = CursorLockMode.Locked;
+        GameStateChanged?.Invoke(this, state);
     }
 }

@@ -12,6 +12,16 @@ public class InGameOverlay : MonoBehaviour
     void Start()
     {
         GameManager.Instance.ScoreChanged += GameManagerOnScoreChanged;
+        GameManager.Instance.GameStateChanged += GameManagerOnGameStateChanged;
+    }
+
+    private void GameManagerOnGameStateChanged(object sender, GameManager.State e)
+    {
+        if (e == GameManager.State.Playing)
+        {
+            playerScoreText.text = "0";
+            opponentScoreText.text = "0";
+        }
     }
 
     private void GameManagerOnScoreChanged(object sender, GameManager.ScoreChangedEventArgs e)
